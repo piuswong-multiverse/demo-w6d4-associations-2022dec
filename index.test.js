@@ -96,4 +96,21 @@ describe('Card model', () => {
     expect(card1.price).toBe(192);
   })
 
+  test('if a Deck can have many Cards, and if a Card can have many Decks', async () => {
+    await db.sync({ force: true });
+    // populate the database with a deck and some cards
+    let deck1 = await Deck.create(seedDeck[0]);
+    let deck2 = await Deck.create(seedDeck[1]);
+    let card1 = await Card.create(seedCard[0]);
+    let card2 = await Card.create(seedCard[1]);
+    // create associations
+    // await deck1.addCard(card1);
+    // await deck1.addCard(card2);
+    await deck1.addCards([card1, card2]);
+    // test the associations
+    const deck1cards = await deck1.getCards();
+    expect(deck1cards.length).toBe(2);
+
+  })
+
 })
