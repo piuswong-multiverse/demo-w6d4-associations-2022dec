@@ -1,6 +1,6 @@
 const { db } = require('./db');
-const { Deck, Collector } = require('./models');
-const { seedDeck, seedCollector } = require('./seedData');
+const { Deck, Collector, Card } = require('./models');
+const { seedDeck, seedCollector, seedCard } = require('./seedData');
 
 describe("Collector and Deck models", () => {
 
@@ -83,6 +83,17 @@ describe("Collector and Deck models", () => {
     expect(person1decks.length).toBe(2);
     expect(person1decks[0] instanceof Deck).toBeTruthy;
     expect(person1decks[0].title).toBe("Favorites");
+  })
+
+})
+
+describe('Card model', () => {
+
+  test('if Card can be created', async () => {
+    await db.sync({ force: true });
+    let card1 = await Card.create(seedCard[0]);
+    expect(card1.name).toBe("charmander");
+    expect(card1.price).toBe(192);
   })
 
 })
