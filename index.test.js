@@ -1,6 +1,6 @@
 const { db } = require('./db');
 const { Deck, Collector } = require('./models');
-
+const { seedDeck, seedCollector } = require('./seedData');
 
 describe("Collector and Deck models", () => {
 
@@ -66,4 +66,23 @@ describe("Collector and Deck models", () => {
     const destroyedDeck = await deck.destroy();
     expect(destroyedDeck.title).toBe("FireDeck");
   })
+
+  // Test the associations between Deck & Collector
+  test('if a Collector can have many Decks', async () => {
+    await db.sync({ force:true }); // reset the db
+    // created some database entries to test...
+    let person1 = await Collector.create(seedCollector[0]);
+    let deck1 = await Deck.create(seedDeck[0]);
+    let deck2 = await Deck.create(seedDeck[1]);
+    // create some associations...
+    // .add[Model]
+    await person1.addDeck(deck1);
+    await person1.addDeck(deck2);
+    // test the association...
+    const person1decks = await person1.getDecks();
+    expect(person1decks.length).toBe(2);
+    expect(person1decks[0] instanceof Deck).toBeTruthy;
+    expect(person1decks[0].title).toBe("Favorites");
+  })
+
 })
