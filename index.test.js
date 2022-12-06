@@ -118,4 +118,26 @@ describe('Card model', () => {
     expect(decksCard2.length).toBe(1);
   })
 
+  test('Cards can be eager-loaded with Decks', async () => {
+    await db.sync({ force:true });
+    // populate db
+    await Collector.bulkCreate(seedCollector);
+    await Deck.bulkCreate(seedDeck);
+    await Card.bulkCreate(seedCard);
+    // create some associations to test
+    let deck1 = await Deck.findByPk(1);
+    let card1 = await Card.findByPk(1);
+    let card2 = await Card.findByPk(2);
+    await deck1.addCards([card1,card2]);
+    // test eager loading
+    const wholeDeckWithCards = await Deck.findAll({
+      include: [{
+        model: Card, as: 'cards'
+      }]
+    });
+    expect(wholeDeckWithCards[0].cards.length).toBe(2);
+    expect(wholeDeckWithCards[1].cards.length).toBe(0);
+    // console.log(wholeDeckWithCards);
+  })
+
 })
