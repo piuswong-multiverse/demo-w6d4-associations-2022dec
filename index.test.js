@@ -111,6 +111,11 @@ describe('Card model', () => {
     const deck1cards = await deck1.getCards();
     expect(deck1cards.length).toBe(2);
 
+    await deck2.addCard(card1);
+    const decksCard1 = await card1.getDecks();
+    expect(decksCard1.length).toBe(2);
+    const decksCard2 = await card2.getDecks();
+    expect(decksCard2.length).toBe(1);
   })
 
 })

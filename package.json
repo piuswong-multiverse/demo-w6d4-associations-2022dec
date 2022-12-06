@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watch-all",
-    "testOnce": "jest"
+    "testOnce": "jest",
+    "test:coverage": "jest --verbose --collect-coverage"
   },
   "keywords": [],
   "author": "",
