@@ -132,9 +132,11 @@ describe('Card model', () => {
     // test eager loading
     const wholeDeckWithCards = await Deck.findAll({
       include: [{
-        model: Card, as: 'cards'
+        model: Card
+        // if you renamed/aliased the models you need to use "as" also; see https://sequelize.org/docs/v6/advanced-association-concepts/eager-loading/
       }]
     });
+    console.log(wholeDeckWithCards[0]);
     expect(wholeDeckWithCards[0].cards.length).toBe(2);
     expect(wholeDeckWithCards[1].cards.length).toBe(0);
     // console.log(wholeDeckWithCards);
